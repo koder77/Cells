@@ -10,3 +10,5 @@ For this the XOR and OR are on a layer 0 and the outputs are copied over to the 
 You can define a number of cells and put some nodes in it which all can contain ANNs which can be linked together by the "set_node_link" function. See the example main.c for more!
 
 This is a work in progress. And later I will build this as a library.
+
+The libfann ANN library is required to build main.c!
