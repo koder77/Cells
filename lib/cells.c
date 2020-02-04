@@ -1,5 +1,5 @@
 /*
-* This file main.c is part of Cells.
+* This file cells.c is part of Cells.
 *
 * (c) Copyright Stefan Pietzonke (jay-t@gmx.net), 2020
 *
@@ -23,60 +23,12 @@
 #include <stdarg.h>
 #include <inttypes.h>
 
-#include <floatfann.h>
-
-
-typedef unsigned char           U1;		/* UBYTE   */
-typedef int16_t                 S2;     /* INT     */
-typedef uint16_t                U2;     /* UINT    */
-typedef int32_t                 S4;     /* LONGINT */
-
-typedef long long               S8;     /* 64 bit long */
-typedef double                  F8;     /* DOUBLE */
-
-
-#define ANN 0
-
-// fann anns
-#define ANNOPEN 1              // state flags
-#define ANNCLOSED 0
-
-struct link
-{
-	S8 node;
-	S8 node_input;
-	S8 node_output;
-};
-
-struct neuron
-{
-	U1 type;
-	S8 inputs;
-	S8 outputs;
-	F8 inputsf;
-	F8 outputsf;
-	S8 *inputs_node;
-	S8 *outputs_node;
-	F8 *inputs_nodef;
-	F8 *outputs_nodef;
-	S8 links_max;
-	struct link *links;
-	F8 strength;
-	struct fann *ann;			// fann neural network
-	U1 fann_state;
-	S8 layer;
-};
-
-struct cell
-{
-	S8 neurons_max;
-	struct neuron *neurons;
-};
+#include "cells.h"
 
 
 S2 alloc_neurons_equal (struct cell *cells, S8 max_cells, S8 neurons)
 {
-	S8 i;
+	S8 i, n;
 	
 	for (i = 0; i < max_cells; i++)
 	{
@@ -85,8 +37,19 @@ S2 alloc_neurons_equal (struct cell *cells, S8 max_cells, S8 neurons)
 		if (cells[i].neurons == NULL)
 		{
 			printf ("ERROR: can't allocate %lli neurons in cell %lli!\n", neurons, i);
-			free (cells);
-			exit (1);
+			return (1);
+		}
+		
+		for (n = 0; n < neurons; n++)
+		{
+			cells[i].neurons[n].type = EMPTY;
+			cells[i].neurons[n].ann = NULL;
+			cells[i].neurons[n].fann_state = ANNCLOSED;
+			cells[i].neurons[n].layer = 0;
+			cells[i].neurons[n].inputs = 0;
+			cells[i].neurons[n].outputs = 0;
+			cells[i].neurons[n].links_max = 0;
+			cells[i].neurons[n].links = NULL;
 		}
 	}
 	return (0);
@@ -94,13 +57,25 @@ S2 alloc_neurons_equal (struct cell *cells, S8 max_cells, S8 neurons)
 
 S2 alloc_neurons (struct cell *cells, S8 cell, S8 neurons)
 {
+	S8 n;
 	cells[cell].neurons_max = neurons;
 	cells[cell].neurons = (struct neuron *) calloc (neurons, sizeof (struct neuron));
 	if (cells[cell].neurons == NULL)
 	{
 		printf ("ERROR: can't allocate %lli neurons in cell %lli!\n", neurons, cell);
-		free (cells);
-		exit (1);
+		return (1);
+	}
+	
+	for (n = 0; n < neurons; n++)
+	{
+		cells[cell].neurons[n].type = EMPTY;
+		cells[cell].neurons[n].ann = NULL;
+		cells[cell].neurons[n].fann_state = ANNCLOSED;
+		cells[cell].neurons[n].layer = 0;
+		cells[cell].neurons[n].inputs = 0;
+		cells[cell].neurons[n].outputs = 0;
+		cells[cell].neurons[n].links_max = 0;
+		cells[cell].neurons[n].links = NULL;
 	}
 	return (0);
 }
@@ -280,72 +255,4 @@ S2 fann_run_ann_go_links (struct cell *cells, S8 max_cells, S8 max_layer)
 		}
 	}
 	return (0);
-}
-
-
-int main (int ac, char *av[])
-{
-	struct cell *cells;
-	
-	S8 max_cells = 1;
-	S8 max_layers = 1;
-	S8 cell_neurons = 3;
-	
-	// set input values
-	F8 node_xor_inputsf[2] = {0.0, 1.0};
-	F8 node_xor_outputsf[1] = {0.0};
-	
-	F8 node_or_inputsf[2] = {1.0, 0.0};
-	F8 node_or_outputsf[1] = {0.0};
-	
-	F8 node_and_inputsf[2] = {0.0, 0.0};
-	F8 node_and_outputsf[1] = {0.0};
-	
-	cells = (struct cell *) calloc (max_cells, sizeof (struct cell));
-	if (cells == NULL)
-	{
-		printf ("ERROR: can't allocate %lli cells!\n", max_cells);
-		exit (1);
-	}
-	
-	alloc_neurons_equal (cells, max_cells, cell_neurons);
-	
-	// fann_read_ann (struct cell *cells, S8 cell, S8 node, U1 *filename, S8 inputs, S8 outputs, F8 *inputs_node, F8 *outputs_node, F8 strength, S8 layer))
-	
-	// read 3 ANNs into cell/nodes
-	fann_read_ann (cells, 0, 0, (U1 *) "fann/xor/xor_float.net", 2, 1, node_xor_inputsf, node_xor_outputsf, 1.0, 0);
-	fann_read_ann (cells, 0, 1, (U1 *) "fann/or/or_float.net", 2, 1, node_or_inputsf, node_or_outputsf, 1.0, 0);
-	fann_read_ann (cells, 0, 2, (U1 *) "fann/and/and_float.net", 2, 1, node_and_inputsf, node_and_outputsf, 1.0, 1);
-	
-	// allocate memory for links
-	if (alloc_node_links (cells, 0, 0, 1) != 0)
-	{
-		printf ("ERROR: can't allocate memory for links!\n");
-		dealloc_neurons (cells, max_cells);
-		free (cells);
-		
-		exit (1);
-	}
-	
-	if (alloc_node_links (cells, 0, 1, 1) != 0)
-	{
-		printf ("ERROR: can't allocate memory for links!\n");
-		dealloc_neurons (cells, max_cells);
-		free (cells);
-		
-		exit (1);
-	}
-	
-	// set_node_link (struct cell *cells, S8 cell, S8 node, S8 link, S8 link_node, S8 input, S8 output)
-	// set links: link output of node 0 and node 1 into inputs of node 2 (AND):
-	set_node_link (cells, 0, 0, 0, 2, 0, 0);
-	set_node_link (cells, 0, 1, 0, 2, 1, 0);
-	
-	// finally run ANNs on the layers 0 and 1:
-	fann_run_ann_go_links (cells, max_cells, max_layers);
-	
-	dealloc_neurons (cells, max_cells);
-	free (cells);
-	
-	exit (0);
 }

@@ -1,3 +1,3 @@
 #!/bin/bash
 
-clang main.c -o cells -Wall -g -lfann
+clang cells-demo.c -o cells-demo -Wall -g -lfann -lcells
