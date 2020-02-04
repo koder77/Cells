@@ -35,9 +35,7 @@ typedef long long               S8;     /* 64 bit long */
 typedef double                  F8;     /* DOUBLE */
 
 
-#define INTEGER 0
-#define FLOAT 1
-#define ANN 2
+#define ANN 0
 
 // fann anns
 #define ANNOPEN 1              // state flags
