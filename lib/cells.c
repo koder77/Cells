@@ -102,6 +102,18 @@ void dealloc_neurons (struct cell *cells, S8 max_cells)
 	}
 }
 
+S2 fann_do_update_ann (struct cell *cells, S8 cell, S8 node, F8 *inputs_node)
+{
+	S8 n;
+	
+	for (n = 0; n < cells[cell].neurons[node].inputs; n++)
+	{
+		cells[cell].neurons[node].inputs_nodef[n] = inputs_node[n];
+	}
+	
+	return (0);
+}
+
 S2 fann_read_ann (struct cell *cells, S8 cell, S8 node, U1 *filename, S8 inputs, S8 outputs, F8 *inputs_node, F8 *outputs_node, S8 layer)
 {
 	S8 n;

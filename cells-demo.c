@@ -90,13 +90,25 @@ int main (int ac, char *av[])
 	fann_run_ann_go_links (cells, max_cells, max_layers);
 	
 	output = fann_get_output (cells, 0, 0, 0);
-	printf ("run ann: cell: 0, node: 0, output 0: %lf\n", output);
+	printf ("run ann XOR layer 0: cell: 0, node: 0, output 0: %lf\n", output);
 	
 	output = fann_get_output (cells, 0, 1, 0);
-	printf ("run ann: cell: 0, node: 1, output 0: %lf\n", output);
+	printf ("run ann OR layer 0: cell: 0, node: 1, output 0: %lf\n", output);
 	
 	output = fann_get_output (cells, 0, 2, 0);
-	printf ("run ann: cell: 0, node: 2, output 0: %lf\n", output);
+	printf ("run ann AND layer 1: cell: 0, node: 2, output 0: %lf\n", output);
+	
+	printf ("\n\nchanging OR: to 0.0, 0.0...\n");
+	node_or_inputsf[0] = 0.0;
+	node_or_inputsf[1] = 0.0;
+	
+	fann_do_update_ann (cells, 0, 1, node_or_inputsf);
+	
+	// finally rerun ANNs on the layers 0 and 1:
+	fann_run_ann_go_links (cells, max_cells, max_layers);
+	
+	output = fann_get_output (cells, 0, 2, 0);
+	printf ("rerun ann AND layer 1: cell: 0, node: 2, output 0: %lf\n", output);
 	
 	dealloc_neurons (cells, max_cells);
 	free (cells);
