@@ -50,6 +50,8 @@ S2 alloc_neurons_equal (struct cell *cells, S8 max_cells, S8 neurons)
 			cells[i].neurons[n].outputs = 0;
 			cells[i].neurons[n].links_max = 0;
 			cells[i].neurons[n].links = NULL;
+			cells[i].neurons[n].inputs_nodef = NULL;
+			cells[i].neurons[n].outputs_nodef = NULL;
 		}
 	}
 	return (0);
@@ -76,6 +78,8 @@ S2 alloc_neurons (struct cell *cells, S8 cell, S8 neurons)
 		cells[cell].neurons[n].outputs = 0;
 		cells[cell].neurons[n].links_max = 0;
 		cells[cell].neurons[n].links = NULL;
+		cells[cell].neurons[n].inputs_nodef = NULL;
+		cells[cell].neurons[n].outputs_nodef = NULL;
 	}
 	return (0);
 }
@@ -89,8 +93,6 @@ void dealloc_neurons (struct cell *cells, S8 max_cells)
 	{
 		for (n = 0; n < cells[i].neurons_max; n++)
 		{
-			if (cells[i].neurons[n].inputs_node) free (cells[i].neurons[n].inputs_node);
-			if (cells[i].neurons[n].outputs_node) free (cells[i].neurons[n].outputs_node);
 			if (cells[i].neurons[n].inputs_nodef) free (cells[i].neurons[n].inputs_nodef);
 			if (cells[i].neurons[n].outputs_nodef) free (cells[i].neurons[n].outputs_nodef);
 			if (cells[i].neurons[n].links) free (cells[i].neurons[n].links);

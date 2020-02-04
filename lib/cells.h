@@ -49,8 +49,8 @@ struct neuron
 	U1 type;
 	S8 inputs;
 	S8 outputs;
-	F8 inputsf;
-	F8 outputsf;
+	// F8 inputsf;
+	// F8 outputsf;
 	S8 *inputs_node;
 	S8 *outputs_node;
 	F8 *inputs_nodef;
