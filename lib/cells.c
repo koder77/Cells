@@ -104,7 +104,7 @@ S2 fann_read_ann (struct cell *cells, S8 cell, S8 node, U1 *filename, S8 inputs,
 {
 	S8 n;
 	
-	printf ("fann_read_ann: cell: %lli, node: %lli\n", cell, node);
+	// printf ("fann_read_ann: cell: %lli, node: %lli\n", cell, node);
 	cells[cell].neurons[node].type = ANN;
 	cells[cell].neurons[node].ann = (struct fann *) fann_create_from_file ((const char*) filename);
 	cells[cell].neurons[node].fann_state = ANNOPEN;
@@ -170,12 +170,17 @@ S2 fann_run_ann (struct cell *cells, S8 cell, S8 node)
 	
 	for (i = 0; i < cells[cell].neurons[node].outputs; i++)
 	{
-		printf ("run ann: cell: %lli, node: %lli, output %lli: %lf\n", cell, node, i, cells[cell].neurons[node].outputs_nodef[i]);
+		// printf ("run ann: cell: %lli, node: %lli, output %lli: %lf\n", cell, node, i, cells[cell].neurons[node].outputs_nodef[i]);
 	}
 	
 	free (input_f);
 	
 	return (0);
+}
+
+F8 fann_get_output (struct cell *cells, S8 cell, S8 node, S8 output)
+{
+	return (cells[cell].neurons[node].outputs_nodef[output]);
 }
 
 S2 alloc_node_links (struct cell *cells, S8 cell, S8 node, S8 links)

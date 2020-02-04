@@ -44,6 +44,8 @@ int main (int ac, char *av[])
 	F8 node_and_inputsf[2] = {0.0, 0.0};
 	F8 node_and_outputsf[1] = {0.0};
 	
+	F8 output;
+	
 	cells = (struct cell *) calloc (max_cells, sizeof (struct cell));
 	if (cells == NULL)
 	{
@@ -86,6 +88,15 @@ int main (int ac, char *av[])
 	
 	// finally run ANNs on the layers 0 and 1:
 	fann_run_ann_go_links (cells, max_cells, max_layers);
+	
+	output = fann_get_output (cells, 0, 0, 0);
+	printf ("run ann: cell: 0, node: 0, output 0: %lf\n", output);
+	
+	output = fann_get_output (cells, 0, 1, 0);
+	printf ("run ann: cell: 0, node: 1, output 0: %lf\n", output);
+	
+	output = fann_get_output (cells, 0, 2, 0);
+	printf ("run ann: cell: 0, node: 2, output 0: %lf\n", output);
 	
 	dealloc_neurons (cells, max_cells);
 	free (cells);
