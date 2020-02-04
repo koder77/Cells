@@ -35,20 +35,6 @@ typedef long long               S8;     /* 64 bit long */
 typedef double                  F8;     /* DOUBLE */
 
 
-// neurons opcodes
-
-enum 
-{
-	ADDI,
-	SUBI,
-	MULI,
-	DIVI,
-	ADDD,
-	SUBD,
-	MULD,
-	DIVD
-};
-
 #define INTEGER 0
 #define FLOAT 1
 #define ANN 2
@@ -71,7 +57,6 @@ struct neuron
 	S8 outputs;
 	F8 inputsf;
 	F8 outputsf;
-	S8 operator;
 	S8 *inputs_node;
 	S8 *outputs_node;
 	F8 *inputs_nodef;
@@ -142,103 +127,6 @@ void dealloc_neurons (struct cell *cells, S8 max_cells)
 	}
 }
 
-S2 set_cell_int_multi (struct cell *cells, S8 cell, S8 inputs, S8 outputs, S8 operator, S8 *inputs_node, S8 *outputs_node, F8 strength, S8 layer)
-{
-	S8 i;
-	S8 n;
-	
-	for (i = 0; i < cells[i].neurons_max; i++)
-	{
-		cells[cell].neurons[i].type = INTEGER;
-		cells[cell].neurons[i].inputs = inputs;
-		cells[cell].neurons[i].outputs = outputs;
-		cells[cell].neurons[i].operator = operator;
-		cells[cell].neurons[i].inputs_node = NULL;
-		cells[cell].neurons[i].outputs_node = NULL;
-		cells[cell].neurons[i].links_max = 0;
-		cells[cell].neurons[i].links = NULL;
-		cells[cell].neurons[i].inputs_nodef = NULL;
-		cells[cell].neurons[i].outputs_nodef = NULL;
-		cells[cell].neurons[i].strength = strength;
-		cells[cell].neurons[i].fann_state = ANNCLOSED;
-		cells[cell].neurons[i].layer = layer;
-		
-		// allocate and copy neurons inputs/outputs;
-		
-		cells[cell].neurons[i].inputs_node = calloc (inputs, sizeof (S8));
-		if (cells[cell].neurons[i].inputs_node == NULL)
-		{
-			printf ("ERROR: can't allocate inputs nodes!\n");
-			return (1);
-		}
-		for (n = 0; n < inputs; n++)
-		{
-			cells[cell].neurons[i].inputs_node[n] = inputs_node[n];
-		}
-		
-		cells[cell].neurons[i].outputs_node = calloc (outputs, sizeof (S8));
-		if (cells[cell].neurons[i].outputs_node == NULL)
-		{
-			printf ("ERROR: can't allocate outputs nodes!\n");
-			return (1);
-		}
-		for (n = 0; n < outputs; n++)
-		{
-			cells[cell].neurons[i].outputs_node[n] = outputs_node[n];
-		}
-	}
-	return (0);
-}
-
-S2 set_cell_float_multi (struct cell *cells, S8 cell, S8 inputs, S8 outputs, S8 operator, F8 *inputs_node, F8 *outputs_node, F8 strength, S8 layer)
-{
-	S8 i;
-	S8 n;
-	
-	for (i = 0; i < cells[i].neurons_max; i++)
-	{
-		cells[cell].neurons[i].type = FLOAT;
-		cells[cell].neurons[i].inputs = inputs;
-		cells[cell].neurons[i].outputs = outputs;
-		cells[cell].neurons[i].operator = operator;
-		cells[cell].neurons[i].inputs_node = NULL;
-		cells[cell].neurons[i].outputs_node = NULL;
-		cells[cell].neurons[i].links_max = 0;
-		cells[cell].neurons[i].links = NULL;
-		cells[cell].neurons[i].inputs_nodef = NULL;
-		cells[cell].neurons[i].outputs_nodef = NULL;
-		cells[cell].neurons[i].strength = strength;
-		cells[cell].neurons[i].fann_state = ANNCLOSED;
-		cells[cell].neurons[i].layer = layer;
-		
-		// allocate and copy neurons inputs/outputs;
-		
-		cells[cell].neurons[i].inputs_nodef = calloc (inputs, sizeof (F8));
-		if (cells[cell].neurons[i].inputs_nodef == NULL)
-		{
-			printf ("ERROR: can't allocate inputs nodes!\n");
-			return (1);
-		}
-		for (n = 0; n < inputs; n++)
-		{
-			cells[cell].neurons[i].inputs_nodef[n] = inputs_node[n];
-		}
-		
-		cells[cell].neurons[i].outputs_nodef = calloc (outputs, sizeof (F8));
-		if (cells[cell].neurons[i].outputs_nodef == NULL)
-		{
-			printf ("ERROR: can't allocate outputs nodes!\n");
-			return (1);
-		}
-		for (n = 0; n < outputs; n++)
-		{
-			cells[cell].neurons[i].outputs_nodef[n] = outputs_node[n];
-		}
-	}
-	return (0);
-}
-
-
 S2 fann_read_ann (struct cell *cells, S8 cell, S8 node, U1 *filename, S8 inputs, S8 outputs, F8 *inputs_node, F8 *outputs_node, F8 strength, S8 layer)
 {
 	S8 n;
@@ -286,7 +174,7 @@ S2 fann_run_ann (struct cell *cells, S8 cell, S8 node)
 	fann_type *input_f;
 	fann_type *output_f;
 	
-	printf ("fann_run_ann: cell: %lli, node: %lli\n", cell, node);
+	// printf ("fann_run_ann: cell: %lli, node: %lli\n", cell, node);
 	
 	input_f = calloc (cells[cell].neurons[node].inputs, sizeof (fann_type));
 	if (input_f == NULL)
@@ -396,117 +284,6 @@ S2 fann_run_ann_go_links (struct cell *cells, S8 max_cells, S8 max_layer)
 	return (0);
 }
 
-S2 run_cell_int (struct cell *cells, S8 cell, S8 node)
-{
-	S8 i;
-	S8 ret_i = 0;
-	
-	if (cells[cell].neurons[node].outputs == 1)
- 	{
-		switch (cells[cell].neurons[node].operator)
-		{
-			case ADDI:
-				for (i = 0; i < cells[cell].neurons[node].inputs; i++)
-				{
-					ret_i = ret_i + cells[cell].neurons[i].inputs_node[i];
-				}
-				cells[cell].neurons[node].outputs_node[0] = ret_i;
-				
-				printf ("run: ADDI cell: %lli, node: %lli, value: %lli\n", cell, node, ret_i);
-				break;
-			
-			case SUBI:
-				ret_i = cells[cell].neurons[0].inputs_node[0];
-				for (i = 1; i < cells[cell].neurons[node].inputs; i++)
-				{
-					ret_i = ret_i - cells[cell].neurons[i].inputs_node[i];
-				}
-				cells[cell].neurons[node].outputs_node[0] = ret_i;
-				
-				printf ("run: SUBI cell: %lli, node: %lli, value: %lli\n", cell, node, ret_i);
-				break;
-				
-			case MULI:
-				ret_i = cells[cell].neurons[0].inputs_node[0];
-				for (i = 1; i < cells[cell].neurons[node].inputs; i++)
-				{
-					ret_i = ret_i * cells[cell].neurons[i].inputs_node[i];
-				}
-				cells[cell].neurons[node].outputs_node[0] = ret_i;
-				
-				printf ("run: MULI cell: %lli, node: %lli, value: %lli\n", cell, node, ret_i);
-				break;
-				
-			case DIVI:
-				ret_i = cells[cell].neurons[0].inputs_node[0];
-				for (i = 1; i < cells[cell].neurons[node].inputs; i++)
-				{
-					ret_i = ret_i / cells[cell].neurons[i].inputs_node[i];
-				}
-				cells[cell].neurons[node].outputs_node[0] = ret_i;
-				
-				printf ("run: DIVI cell: %lli, node: %lli, value: %lli\n", cell, node, ret_i);
-				break;
-		}
-	}
-	return (0);
-}
-
-S2 run_cell_float (struct cell *cells, S8 cell, S8 node)
-{
-	S8 i;
-	F8 ret_i = 0.0;
-	
-	if (cells[cell].neurons[node].outputs == 1)
-	{
-		switch (cells[cell].neurons[node].operator)
-		{
-			case ADDD:
-				for (i = 0; i < cells[cell].neurons[node].inputs; i++)
-				{
-					ret_i = ret_i + cells[cell].neurons[i].inputs_nodef[i];
-				}
-				cells[cell].neurons[node].outputs_nodef[0] = ret_i;
-				
-				printf ("run: ADDD cell: %lli, node: %lli, value: %lf\n", cell, node, ret_i);
-				break;
-				
-			case SUBD:
-				ret_i = cells[cell].neurons[0].inputs_nodef[0];
-				for (i = 1; i < cells[cell].neurons[node].inputs; i++)
-				{
-					ret_i = ret_i - cells[cell].neurons[i].inputs_nodef[i];
-				}
-				cells[cell].neurons[node].outputs_nodef[0] = ret_i;
-				
-				printf ("run: SUBD cell: %lli, node: %lli, value: %lf\n", cell, node, ret_i);
-				break;
-				
-			case MULD:
-				ret_i = cells[cell].neurons[0].inputs_nodef[0];
-				for (i = 1; i < cells[cell].neurons[node].inputs; i++)
-				{
-					ret_i = ret_i * cells[cell].neurons[i].inputs_nodef[i];
-				}
-				cells[cell].neurons[node].outputs_nodef[0] = ret_i;
-				
-				printf ("run: MULD cell: %lli, node: %lli, value: %lf\n", cell, node, ret_i);
-				break;
-				
-			case DIVD:
-				ret_i = cells[cell].neurons[0].inputs_nodef[0];
-				for (i = 1; i < cells[cell].neurons[node].inputs; i++)
-				{
-					ret_i = ret_i / cells[cell].neurons[i].inputs_nodef[i];
-				}
-				cells[cell].neurons[node].outputs_nodef[0] = ret_i;
-				
-				printf ("run: DIVD cell: %lli, node: %lli, value: %lf\n", cell, node, ret_i);
-				break;
-		}
-	}
-	return (0);
-}
 
 int main (int ac, char *av[])
 {
