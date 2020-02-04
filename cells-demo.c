@@ -58,9 +58,9 @@ int main (int ac, char *av[])
 	// fann_read_ann (struct cell *cells, S8 cell, S8 node, U1 *filename, S8 inputs, S8 outputs, F8 *inputs_node, F8 *outputs_node, F8 strength, S8 layer))
 	
 	// read 3 ANNs into cell/nodes
-	fann_read_ann (cells, 0, 0, (U1 *) "fann/xor/xor_float.net", 2, 1, node_xor_inputsf, node_xor_outputsf, 1.0, 0);
-	fann_read_ann (cells, 0, 1, (U1 *) "fann/or/or_float.net", 2, 1, node_or_inputsf, node_or_outputsf, 1.0, 0);
-	fann_read_ann (cells, 0, 2, (U1 *) "fann/and/and_float.net", 2, 1, node_and_inputsf, node_and_outputsf, 1.0, 1);
+	fann_read_ann (cells, 0, 0, (U1 *) "fann/xor/xor_float.net", 2, 1, node_xor_inputsf, node_xor_outputsf, 0);
+	fann_read_ann (cells, 0, 1, (U1 *) "fann/or/or_float.net", 2, 1, node_or_inputsf, node_or_outputsf, 0);
+	fann_read_ann (cells, 0, 2, (U1 *) "fann/and/and_float.net", 2, 1, node_and_inputsf, node_and_outputsf, 1);
 	
 	// allocate memory for links
 	if (alloc_node_links (cells, 0, 0, 1) != 0)
