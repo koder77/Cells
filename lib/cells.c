@@ -106,6 +106,13 @@ S2 fann_do_update_ann (struct cell *cells, S8 cell, S8 node, F8 *inputs_node)
 {
 	S8 n;
 	
+	// safety check:
+	if (node < 0 || node >= cells[cell].neurons_max)
+	{
+		printf ("fann_do_update_ann: error: node out of range!\n");
+		return (1);
+	}
+	
 	for (n = 0; n < cells[cell].neurons[node].inputs; n++)
 	{
 		cells[cell].neurons[node].inputs_nodef[n] = inputs_node[n];
@@ -117,6 +124,13 @@ S2 fann_do_update_ann (struct cell *cells, S8 cell, S8 node, F8 *inputs_node)
 S2 fann_read_ann (struct cell *cells, S8 cell, S8 node, U1 *filename, S8 inputs, S8 outputs, F8 *inputs_node, F8 *outputs_node, S8 layer)
 {
 	S8 n;
+	
+	// safety check:
+	if (node < 0 || node >= cells[cell].neurons_max)
+	{
+		printf ("fann_read_ann: error: node out of range!\n");
+		return (1);
+	}
 	
 	// printf ("fann_read_ann: cell: %lli, node: %lli\n", cell, node);
 	cells[cell].neurons[node].type = ANN;
@@ -161,6 +175,13 @@ S2 fann_run_ann (struct cell *cells, S8 cell, S8 node)
 	fann_type *input_f;
 	fann_type *output_f;
 	
+	// safety check:
+	if (node < 0 || node >= cells[cell].neurons_max)
+	{
+		printf ("fann_run_ann: error: node out of range!\n");
+		return (1);
+	}
+	
 	// printf ("fann_run_ann: cell: %lli, node: %lli\n", cell, node);
 	
 	input_f = calloc (cells[cell].neurons[node].inputs, sizeof (fann_type));
@@ -194,6 +215,13 @@ S2 fann_run_ann (struct cell *cells, S8 cell, S8 node)
 
 F8 fann_get_output (struct cell *cells, S8 cell, S8 node, S8 output)
 {
+	// safety check:
+	if (node < 0 || node >= cells[cell].neurons_max)
+	{
+		printf ("fann_get_output: error: node out of range!\n");
+		return (0.0);
+	}
+	
 	return (cells[cell].neurons[node].outputs_nodef[output]);
 }
 
@@ -211,6 +239,13 @@ S2 alloc_node_links (struct cell *cells, S8 cell, S8 node, S8 links)
 
 S2 set_node_link (struct cell *cells, S8 cell, S8 node, S8 link, S8 link_node, S8 input, S8 output)
 {
+	// safety check:
+	if (node < 0 || node >= cells[cell].neurons_max)
+	{
+		printf ("set_node_link: error: node out of range!\n");
+		return (1);
+	}
+	
 	if (cells[cell].neurons[node].links == NULL)
 	{
 		printf ("set_node_links: error: no links allocated: cell: %lli, node: %lli!\n", cell, node);
@@ -231,7 +266,7 @@ S2 set_node_link (struct cell *cells, S8 cell, S8 node, S8 link, S8 link_node, S
 	}
 }
 
-S2 fann_run_ann_go_links (struct cell *cells, S8 max_cells, S8 max_layer)
+S2 fann_run_ann_go_links (struct cell *cells, S8 start_cell, S8 end_cell, S8 start_layer, S8 end_layer)
 {
 	S8 i, j;
 	S8 n;
@@ -241,9 +276,9 @@ S2 fann_run_ann_go_links (struct cell *cells, S8 max_cells, S8 max_layer)
 	// fann_type *links_input_f;
 	// fann_type *links_output_f;
 	
-	for (i = 0; i < max_cells; i++)
+	for (i = start_cell; i <= end_cell; i++)
 	{
-		for (layer = 0; layer <= max_layer; layer++)
+		for (layer = start_layer; layer <= end_layer; layer++)
 		{
 			for (n = 0; n < cells[i].neurons_max; n++)
 			{

@@ -87,7 +87,8 @@ int main (int ac, char *av[])
 	set_node_link (cells, 0, 1, 0, 2, 1, 0);
 	
 	// finally run ANNs on the layers 0 and 1:
-	fann_run_ann_go_links (cells, max_cells, max_layers);
+	// S2 fann_run_ann_go_links (struct cell *cells, S8 start_cell, S8 end_cell, S8 start_layer, S8 end_layer)
+	fann_run_ann_go_links (cells, 0, 0, 0, max_layers);
 	
 	output = fann_get_output (cells, 0, 0, 0);
 	printf ("run ann XOR layer 0: cell: 0, node: 0, output 0: %lf\n", output);
@@ -105,7 +106,7 @@ int main (int ac, char *av[])
 	fann_do_update_ann (cells, 0, 1, node_or_inputsf);
 	
 	// finally rerun ANNs on the layers 0 and 1:
-	fann_run_ann_go_links (cells, max_cells, max_layers);
+	fann_run_ann_go_links (cells, 0, 0, 0, max_layers);
 	
 	output = fann_get_output (cells, 0, 2, 0);
 	printf ("rerun ann AND layer 1: cell: 0, node: 2, output 0: %lf\n", output);

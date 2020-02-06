@@ -1,4 +1,6 @@
 Cells - 0.1 2020
 Initial commits, everything WIP. Much work to do!
 
--- Stefan Pietzonke <jay-t@gmx.net> Tue Feb 04 2020 17:24 +0100
+Added: bound checks for nodes at the functions to check if node is in legal range!
+
+-- Stefan Pietzonke <jay-t@gmx.net> Thu Feb 06 2020 20:06 +0100
