@@ -29,6 +29,7 @@
 int main (int ac, char *av[])
 {
 	struct cell *cells;
+	struct cell *load_cells;
 	
 	S8 max_cells = 1;
 	S8 max_layers = 1;
@@ -111,8 +112,30 @@ int main (int ac, char *av[])
 	output = fann_get_output (cells, 0, 2, 0);
 	printf ("rerun ann AND layer 1: cell: 0, node: 2, output 0: %lf\n", output);
 	
+	printf ("saving cells...\n");
+	// S2 fann_save_cells (struct cell *cells, U1 *filename, S8 start_cell, S8 end_cell)
+	if (fann_save_cells (cells, (U1 *) "cell-demo.cells", 0, 0) != 0)
+	{
+		printf ("ERROR saving cells!\n");
+		exit (1);
+	}
+	printf ("OK!\n");
+	
+	printf ("loading cells file...\n");
+	load_cells = fann_load_cells ((U1 *) "cell-demo.cells");
+	if (load_cells == NULL)
+	{
+		printf ("ERROR: can't load cell file!\n");
+	}
+	else
+	{
+		printf ("OK!\n");
+	}
+	
 	dealloc_neurons (cells, max_cells);
+	dealloc_neurons (load_cells, max_cells);
 	free (cells);
+	if (load_cells) free (load_cells);
 	
 	exit (0);
 }

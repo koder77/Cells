@@ -2,5 +2,7 @@ Cells - 0.1 2020
 Initial commits, everything WIP. Much work to do!
 
 Added: bound checks for nodes at the functions to check if node is in legal range!
+New: file.c: fann_save_cells() and fann_load_cells() functions.
+string.c added.
 
--- Stefan Pietzonke <jay-t@gmx.net> Thu Feb 06 2020 20:06 +0100
+-- Stefan Pietzonke <jay-t@gmx.net> Fri Feb 07 2020 19:00 +0100

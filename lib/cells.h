@@ -23,7 +23,7 @@
 
 typedef unsigned char           U1;		/* UBYTE   */
 typedef int16_t                 S2;     /* INT     */
-typedef uint16_t                U2;     /* UINT    */
+typedef uint16_t                U2;  	/* UINT */
 typedef int32_t                 S4;     /* LONGINT */
 
 typedef long long               S8;     /* 64 bit long */
@@ -36,6 +36,13 @@ typedef double                  F8;     /* DOUBLE */
 // fann anns
 #define ANNOPEN 1              // state flags
 #define ANNCLOSED 0
+
+#define MAXFANNNAME 256
+#define MAXLINELEN 256
+
+#define TRUE 1
+#define FALSE 0
+
 
 struct link
 {
@@ -53,6 +60,7 @@ struct neuron
 	F8 *outputs_nodef;
 	S8 links_max;
 	struct link *links;
+	U1 fann_name[MAXFANNNAME];
 	struct fann *ann;			// fann neural network
 	U1 fann_state;
 	S8 layer;
@@ -75,3 +83,11 @@ S2 set_node_link (struct cell *cells, S8 cell, S8 node, S8 link, S8 link_node, S
 S2 fann_run_ann_go_links (struct cell *cells, S8 start_cell, S8 end_cell, S8 start_layer, S8 end_layer);
 F8 fann_get_output (struct cell *cells, S8 cell, S8 node, S8 output);
 S2 fann_do_update_ann (struct cell *cells, S8 cell, S8 node, F8 *inputs_node);
+// file.c:
+char *fgets_uni (char *str, int len, FILE *fptr);
+S2 fann_save_cells (struct cell *cells, U1 *filename, S8 start_cell, S8 end_cell);
+struct cell *fann_load_cells (U1 *filename);
+// string.c:
+size_t strlen_safe (const char * str, int maxlen);
+S2 searchstr (U1 *str, U1 *srchstr, S2 start, S2 end, U1 case_sens);
+void convtabs (U1 *str);

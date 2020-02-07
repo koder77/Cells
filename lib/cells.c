@@ -1,26 +1,27 @@
 /*
-* This file cells.c is part of Cells.
-*
-* (c) Copyright Stefan Pietzonke (jay-t@gmx.net), 2020
-*
-* Cells is free software: you can redistribute it and/or modify
-* it under the terms of the GNU General Public License as published by
-* the Free Software Foundation, either version 3 of the License, or
-* (at your option) any later version.
-*
-* Cells is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-* GNU General Public License for more details.
-*
-* You should have received a copy of the GNU General Public License
-* along with Cells.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ * This file cells.c is part of Cells.
+ *
+ * (c) Copyright Stefan Pietzonke (jay-t@gmx.net), 2020
+ *
+ * Cells is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Cells is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Cells.  If not, see <http://www.gnu.org/licenses/>.
+ */
 
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdarg.h>
+#include <string.h>
 #include <inttypes.h>
 
 #include "cells.h"
@@ -124,6 +125,7 @@ S2 fann_do_update_ann (struct cell *cells, S8 cell, S8 node, F8 *inputs_node)
 S2 fann_read_ann (struct cell *cells, S8 cell, S8 node, U1 *filename, S8 inputs, S8 outputs, F8 *inputs_node, F8 *outputs_node, S8 layer)
 {
 	S8 n;
+	S8 filename_len;
 	
 	// safety check:
 	if (node < 0 || node >= cells[cell].neurons_max)
@@ -131,6 +133,15 @@ S2 fann_read_ann (struct cell *cells, S8 cell, S8 node, U1 *filename, S8 inputs,
 		printf ("fann_read_ann: error: node out of range!\n");
 		return (1);
 	}
+	
+	filename_len = strlen_safe ((const char *) filename, MAXFANNNAME - 1);
+	if (filename_len + 1 > MAXFANNNAME)
+ 	{
+		printf ("fann_read_ann: error fileaname too long!\n");
+		return (1);
+	}
+	
+	strcpy ((char *) cells[cell].neurons[node].fann_name, (const char *) filename);
 	
 	// printf ("fann_read_ann: cell: %lli, node: %lli\n", cell, node);
 	cells[cell].neurons[node].type = ANN;
