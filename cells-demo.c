@@ -117,6 +117,8 @@ int main (int ac, char *av[])
 	if (fann_save_cells (cells, (U1 *) "cell-demo.cells", 0, 0) != 0)
 	{
 		printf ("ERROR saving cells!\n");
+		dealloc_neurons (cells, max_cells);
+		free (cells);
 		exit (1);
 	}
 	printf ("OK!\n");
@@ -126,6 +128,9 @@ int main (int ac, char *av[])
 	if (load_cells == NULL)
 	{
 		printf ("ERROR: can't load cell file!\n");
+		dealloc_neurons (cells, max_cells);
+		free (cells);
+		exit (1);
 	}
 	else
 	{
@@ -152,9 +157,12 @@ int main (int ac, char *av[])
 	printf ("load_cells: run ann AND layer 1: cell: 0, node: 2, output 0: %lf\n", output);
 	
 	dealloc_neurons (cells, max_cells);
-	dealloc_neurons (load_cells, max_cells);
 	free (cells);
-	if (load_cells) free (load_cells);
 	
+	if (load_cells) 
+	{
+		dealloc_neurons (load_cells, max_cells);
+		free (load_cells);
+	}
 	exit (0);
 }
