@@ -293,6 +293,25 @@ S2 set_node_link (struct cell *cells, S8 cell, S8 node, S8 link, S8 link_node, S
 	}
 }
 
+S8 fann_get_max_layer (struct cell *cells, S8 start_cell, S8 end_cell)
+{
+	S8 i, n;
+	S8 max_layer = 0;
+	
+	for (i = start_cell; i <= end_cell; i++)
+	{
+		for (n = 0; n < cells[i].neurons_max; n++)
+		{
+			if (cells[i].neurons[n].layer > max_layer)
+			{
+				max_layer = cells[i].neurons[n].layer;
+			}
+		}
+	}
+	
+	return (max_layer);
+}
+
 S2 fann_run_ann_go_links (struct cell *cells, S8 start_cell, S8 end_cell, S8 start_layer, S8 end_layer)
 {
 	S8 i, j;

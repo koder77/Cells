@@ -83,6 +83,7 @@ S2 set_node_link (struct cell *cells, S8 cell, S8 node, S8 link, S8 link_node, S
 S2 fann_run_ann_go_links (struct cell *cells, S8 start_cell, S8 end_cell, S8 start_layer, S8 end_layer);
 F8 fann_get_output (struct cell *cells, S8 cell, S8 node, S8 output);
 S2 fann_do_update_ann (struct cell *cells, S8 cell, S8 node, F8 *inputs_node);
+S8 fann_get_max_layer (struct cell *cells, S8 start_cell, S8 end_cell);
 // file.c:
 char *fgets_uni (char *str, int len, FILE *fptr);
 S2 fann_save_cells (struct cell *cells, U1 *filename, S8 start_cell, S8 end_cell);

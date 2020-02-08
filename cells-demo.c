@@ -144,7 +144,8 @@ int main (int ac, char *av[])
 	fann_read_ann (load_cells, 0, 1, (U1 *) "", 0, 0, node_or_inputsf, node_or_outputsf, 0, 0);
 	fann_read_ann (load_cells, 0, 2, (U1 *) "", 0, 0, node_and_inputsf, node_and_outputsf, 1, 0);
 	
-	// run ANNs in load_cell:
+	// run ANNs in load_cell:	
+	max_layers = fann_get_max_layer (load_cells, 0, 0);
 	fann_run_ann_go_links (load_cells, 0, 0, 0, max_layers);
 	
 	output = fann_get_output (load_cells, 0, 0, 0);
