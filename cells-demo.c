@@ -95,7 +95,7 @@ int main (int ac, char *av[])
 	printf ("run ann XOR layer 0: cell: 0, node: 0, output 0: %lf\n", output);
 	
 	output = fann_get_output (cells, 0, 1, 0);
-	printf ("run ann OR layer 0: cell: 0, node: 1, output 0: %lf\n", output);
+	printf ("run ann OR layer  0: cell: 0, node: 1, output 0: %lf\n", output);
 	
 	output = fann_get_output (cells, 0, 2, 0);
 	printf ("run ann AND layer 1: cell: 0, node: 2, output 0: %lf\n", output);
@@ -152,7 +152,7 @@ int main (int ac, char *av[])
 	printf ("\nload_cells: run ann XOR layer 0: cell: 0, node: 0, output 0: %lf\n", output);
 	
 	output = fann_get_output (load_cells, 0, 1, 0);
-	printf ("load_cells: run ann OR layer 0: cell: 0, node: 1, output 0: %lf\n", output);
+	printf ("load_cells: run ann OR layer  0: cell: 0, node: 1, output 0: %lf\n", output);
 	
 	output = fann_get_output (load_cells, 0, 2, 0);
 	printf ("load_cells: run ann AND layer 1: cell: 0, node: 2, output 0: %lf\n", output);

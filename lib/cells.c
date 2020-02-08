@@ -312,6 +312,11 @@ S8 fann_get_max_layer (struct cell *cells, S8 start_cell, S8 end_cell)
 	return (max_layer);
 }
 
+S8  fann_get_max_nodes (struct cell *cells, S8 cell)
+{
+	return (cells[cell].neurons_max);
+}
+
 S2 fann_run_ann_go_links (struct cell *cells, S8 start_cell, S8 end_cell, S8 start_layer, S8 end_layer)
 {
 	S8 i, j;
