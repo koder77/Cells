@@ -6,5 +6,6 @@ New: file.c: fann_save_cells() and fann_load_cells() functions.
 string.c added.
 
 New: fann_load_cell () cleanup and BUGFIXES!
+set_node_link: overflow checks added!
 
--- Stefan Pietzonke <jay-t@gmx.net> Sat Feb 08 2020 13:55 +0100
+-- Stefan Pietzonke <jay-t@gmx.net> Sat Feb 08 2020 20:46 +0100

@@ -279,6 +279,25 @@ S2 set_node_link (struct cell *cells, S8 cell, S8 node, S8 link, S8 link_node, S
 		return (1);
 	}
 	
+	if (link >= cells[cell].neurons[node].links_max || link < 0)
+	{
+		printf ("set_node_link: error: link overflow!\n");
+		return (1);
+	}
+	
+	// inputs/outputs sense check:
+	if (input >= cells[cell].neurons[link_node].inputs || input < 0)
+	{
+		printf ("set_node_link: error: link input overflow!\n");
+		return (1);
+	}
+	
+	if (output >= cells[cell].neurons[node].outputs || output < 0)
+	{
+		printf ("set_node_link: error: output overflow!\n");
+		return (1);
+	}
+	
 	if (link < cells[cell].neurons[node].links_max)
 	{
 		cells[cell].neurons[node].links[link].node = link_node;
