@@ -458,7 +458,7 @@ struct cell *fann_load_cells (U1 *filename)
 			if (get_string (buf, fann_name) == 0)
 			{
 				strcpy ((char *) cells[curr_cell].neurons[n].fann_name, (const char *) fann_name);
-				printf ("fann_name: '%s'\n", fann_name);
+				// printf ("fann_name: '%s'\n", fann_name);
 			}
 			else
 			{
