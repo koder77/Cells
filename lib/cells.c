@@ -163,6 +163,11 @@ S2 fann_read_ann (struct cell *cells, S8 cell, S8 node, U1 *filename, S8 inputs,
 		cells[cell].neurons[node].links_max = 0;
 		cells[cell].neurons[node].links = NULL;
 	}
+	else
+	{
+		inputs = cells[cell].neurons[node].inputs;
+		outputs = cells[cell].neurons[node].outputs;
+	}
 	
 	// allocate and copy neurons inputs/outputs;
 	

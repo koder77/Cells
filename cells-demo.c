@@ -135,9 +135,9 @@ int main (int ac, char *av[])
 	printf ("\n\nrunning 'load_cells' ANNs...\n");
 	
 	// read 3 ANNs into cell/nodes: load_cell
-	fann_read_ann (load_cells, 0, 0, (U1 *) "", 2, 1, node_xor_inputsf, node_xor_outputsf, 0, 0);
-	fann_read_ann (load_cells, 0, 1, (U1 *) "", 2, 1, node_or_inputsf, node_or_outputsf, 0, 0);
-	fann_read_ann (load_cells, 0, 2, (U1 *) "", 2, 1, node_and_inputsf, node_and_outputsf, 1, 0);
+	fann_read_ann (load_cells, 0, 0, (U1 *) "", 0, 0, node_xor_inputsf, node_xor_outputsf, 0, 0);
+	fann_read_ann (load_cells, 0, 1, (U1 *) "", 0, 0, node_or_inputsf, node_or_outputsf, 0, 0);
+	fann_read_ann (load_cells, 0, 2, (U1 *) "", 0, 0, node_and_inputsf, node_and_outputsf, 1, 0);
 	
 	// run ANNs in load_cell:
 	fann_run_ann_go_links (load_cells, 0, 0, 0, max_layers);
