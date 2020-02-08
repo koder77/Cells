@@ -304,7 +304,7 @@ S2 get_string (U1 *buf, U1 *string)
 	if (pos > -1)
 	{
 		j = 0;
-		for (i = pos + 1; i < str_len; i++)
+		for (i = pos + 2; i < str_len; i++)
 		{
 			string[j] = buf[i];
 			j++;
@@ -408,13 +408,15 @@ struct cell *fann_load_cells (U1 *filename)
 		
 		str_cut_newline (buf);
 		
-		if (strcmp ((char *) buf, "EOF") == 0)
+		// printf ("ANNs load-line: '%s'\n", buf);
+		
+		if (searchstr (buf, (U1 *) "EOF", 0, 0, 1) >= 0)
 		{
 			// printf ("fann_load_cells: got EOF line, done reading! %s\n", filename);
 			file_eof = 1;
 		}
 		
-		if (strcmp ((char *) buf, "cell =") == 0)
+		if (searchstr (buf, (U1 *) "cell =", 0, 0, 1) >= 0)
 		{
 			if (get_number (buf, &val) == 0)
 			{
@@ -428,7 +430,7 @@ struct cell *fann_load_cells (U1 *filename)
 			}
 		}
 	
-		if (strcmp ((char *) buf, "neurons =") == 0)
+		if (searchstr (buf, (U1 *) "neurons =", 0, 0, 1) >= 0)
 		{
 			if (get_number (buf, &val) == 0)
 			{
@@ -451,11 +453,12 @@ struct cell *fann_load_cells (U1 *filename)
 			}
 		}
 		
-		if (strcmp ((char *) buf, "fann_name =") == 0)
+		if (searchstr (buf, (U1 *) "fann_name =", 0, 0, 1) >= 0)
 		{
 			if (get_string (buf, fann_name) == 0)
 			{
 				strcpy ((char *) cells[curr_cell].neurons[n].fann_name, (const char *) fann_name);
+				printf ("fann_name: '%s'\n", fann_name);
 			}
 			else
 			{
@@ -465,7 +468,7 @@ struct cell *fann_load_cells (U1 *filename)
 			}
 		}
 		
-		if (strcmp ((char *) buf, "type =") == 0)
+		if (searchstr (buf, (U1 *) "type =", 0, 0, 1) >= 0)
 		{
 			if (get_number (buf, &val) == 0)
 			{
@@ -479,7 +482,7 @@ struct cell *fann_load_cells (U1 *filename)
 			}
 		}
 		
-		if (strcmp ((char *) buf, "inputs =") == 0)
+		if (searchstr (buf, (U1 *) "inputs =", 0, 0, 1) >= 0)
 		{
 			if (get_number (buf, &val) == 0)
 			{
@@ -493,7 +496,7 @@ struct cell *fann_load_cells (U1 *filename)
 			}
 		}
 		
-		if (strcmp ((char *) buf, "outputs =") == 0)
+		if (searchstr (buf, (U1 *) "outputs =", 0, 0, 1) >= 0)
 		{
 			if (get_number (buf, &val) == 0)
 			{
@@ -507,7 +510,7 @@ struct cell *fann_load_cells (U1 *filename)
 			}
 		}
 		
-		if (strcmp ((char *) buf, "links_max =") == 0)
+		if (searchstr (buf, (U1 *) "links_max =", 0, 0, 1) >= 0)
 		{
 			if (get_number (buf, &val) == 0)
 			{
@@ -531,7 +534,7 @@ struct cell *fann_load_cells (U1 *filename)
 			l = 0;
 		}
 		
-		if (strcmp ((char *) buf, "layer =") == 0)
+		if (searchstr (buf, (U1 *) "layer =", 0, 0, 1) >= 0)
 		{
 			if (get_number (buf, &val) == 0)
 			{
@@ -547,7 +550,7 @@ struct cell *fann_load_cells (U1 *filename)
 		
 		// cells[cell].neurons[node].links[link].node = link_node;
 		
-		if (strcmp ((char *) buf, "link_node =") == 0)
+		if (searchstr (buf, (U1 *) "link_node =", 0, 0, 1) >= 0)
 		{
 			if (get_number (buf, &val) == 0)
 			{
@@ -561,7 +564,7 @@ struct cell *fann_load_cells (U1 *filename)
 			}
 		}
 		
-		if (strcmp ((char *) buf, "link_node_input =") == 0)
+		if (searchstr (buf, (U1 *) "link_node_input =", 0, 0, 1) >= 0)
 		{
 			if (get_number (buf, &val) == 0)
 			{
@@ -575,7 +578,7 @@ struct cell *fann_load_cells (U1 *filename)
 			}
 		}
 		
-		if (strcmp ((char *) buf, "link_node_output =") == 0)
+		if (searchstr (buf, (U1 *) "link_node_output =", 0, 0, 1) >= 0)
 		{
 			if (get_number (buf, &val) == 0)
 			{
@@ -589,7 +592,7 @@ struct cell *fann_load_cells (U1 *filename)
 			}
 		}
 		
-		if (strcmp ((char *) buf, "links_end") == 0)
+		if (searchstr (buf, (U1 *) "links_end", 0, 0, 1) >= 0)
 		{
 			// increase node:
 			n++;

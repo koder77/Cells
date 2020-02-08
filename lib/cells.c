@@ -122,8 +122,10 @@ S2 fann_do_update_ann (struct cell *cells, S8 cell, S8 node, F8 *inputs_node)
 	return (0);
 }
 
-S2 fann_read_ann (struct cell *cells, S8 cell, S8 node, U1 *filename, S8 inputs, S8 outputs, F8 *inputs_node, F8 *outputs_node, S8 layer)
+S2 fann_read_ann (struct cell *cells, S8 cell, S8 node, U1 *filename, S8 inputs, S8 outputs, F8 *inputs_node, F8 *outputs_node, S8 layer, S8 init)
 {
+	// do a new ANN init if "init" is set to one!!
+	
 	S8 n;
 	S8 filename_len;
 	
@@ -141,17 +143,26 @@ S2 fann_read_ann (struct cell *cells, S8 cell, S8 node, U1 *filename, S8 inputs,
 		return (1);
 	}
 	
-	strcpy ((char *) cells[cell].neurons[node].fann_name, (const char *) filename);
+	if (filename_len > 0)
+	{
+		strcpy ((char *) cells[cell].neurons[node].fann_name, (const char *) filename);
+	}
+	
+	// printf ("fann_read_ann: ann filename: '%s'\n", cells[cell].neurons[node].fann_name);
 	
 	// printf ("fann_read_ann: cell: %lli, node: %lli\n", cell, node);
 	cells[cell].neurons[node].type = ANN;
-	cells[cell].neurons[node].ann = (struct fann *) fann_create_from_file ((const char*) filename);
+	cells[cell].neurons[node].ann = (struct fann *) fann_create_from_file ((const char*) cells[cell].neurons[node].fann_name);
 	cells[cell].neurons[node].fann_state = ANNOPEN;
-	cells[cell].neurons[node].layer = layer;
-	cells[cell].neurons[node].inputs = inputs;
-	cells[cell].neurons[node].outputs = outputs;
-	cells[cell].neurons[node].links_max = 0;
-	cells[cell].neurons[node].links = NULL;
+	
+	if (init == 1)
+ 	{
+		cells[cell].neurons[node].layer = layer;
+		cells[cell].neurons[node].inputs = inputs;
+		cells[cell].neurons[node].outputs = outputs;
+		cells[cell].neurons[node].links_max = 0;
+		cells[cell].neurons[node].links = NULL;
+	}
 	
 	// allocate and copy neurons inputs/outputs;
 	
@@ -283,10 +294,7 @@ S2 fann_run_ann_go_links (struct cell *cells, S8 start_cell, S8 end_cell, S8 sta
 	S8 n;
 	S8 linked_neuron, node_input, node_output;
 	S8 layer;
-	
-	// fann_type *links_input_f;
-	// fann_type *links_output_f;
-	
+
 	for (i = start_cell; i <= end_cell; i++)
 	{
 		for (layer = start_layer; layer <= end_layer; layer++)

@@ -76,7 +76,7 @@ struct cell
 S2 alloc_neurons_equal (struct cell *cells, S8 max_cells, S8 neurons);
 S2 alloc_neurons (struct cell *cells, S8 cell, S8 neurons);
 void dealloc_neurons (struct cell *cells, S8 max_cells);
-S2 fann_read_ann (struct cell *cells, S8 cell, S8 node, U1 *filename, S8 inputs, S8 outputs, F8 *inputs_node, F8 *outputs_node, S8 layer);
+S2 fann_read_ann (struct cell *cells, S8 cell, S8 node, U1 *filename, S8 inputs, S8 outputs, F8 *inputs_node, F8 *outputs_node, S8 layer, S8 init);
 S2 fann_run_ann (struct cell *cells, S8 cell, S8 node);
 S2 alloc_node_links (struct cell *cells, S8 cell, S8 node, S8 links);
 S2 set_node_link (struct cell *cells, S8 cell, S8 node, S8 link, S8 link_node, S8 input, S8 output);
