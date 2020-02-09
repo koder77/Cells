@@ -367,7 +367,7 @@ S2 set_node_link (struct cell *cells, S8 cell, S8 node, S8 link, S8 link_node, S
 	
 	if (output >= cells[cell].neurons[node].outputs || output < 0)
 	{
-		printf ("set_node_link: error: output overflow!\n");
+		printf ("set_node_link: error: link output overflow!\n");
 		return (1);
 	}
 	
