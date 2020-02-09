@@ -223,7 +223,7 @@ S2 fann_save_cells (struct cell *cells, U1 *filename, S8 start_cell, S8 end_cell
 			// save links 
 			if (cells[i].neurons[n].links_max > 0)
    			{
-				if (fprintf (fptr, "links\n") < 0)
+				if (fprintf (fptr, "links_start\n") < 0)
 				{
 					printf ("fann_save_cells: error saving links header to file: %s\n", filename);
 					fclose (fptr);
@@ -342,6 +342,11 @@ struct cell *fann_load_cells (U1 *filename)
 	U1 file_eof = 0;
 	
 	FILE *fptr;
+	
+	U1 link_node = 0;
+	U1 link_node_input = 0;
+	U1 link_node_output = 0;
+	U1 link_found_all = 0;
 	
 	fptr = fopen ((const char *) filename, "r");
 	if (fptr == NULL)
@@ -538,8 +543,6 @@ struct cell *fann_load_cells (U1 *filename)
 				fclose (fptr);
 				return (NULL);
 			}
-			
-			l = 0;
 		}
 		
 		if (searchstr (buf, (U1 *) "layer =", 0, 0, 1) >= 0)
@@ -556,47 +559,77 @@ struct cell *fann_load_cells (U1 *filename)
 			}
 		}
 		
-		// cells[cell].neurons[node].links[link].node = link_node;
-		
-		if (searchstr (buf, (U1 *) "link_node =", 0, 0, 1) >= 0)
+		if (searchstr (buf, (U1 *) "links_start", 0, 0, 1) >= 0)
 		{
-			if (get_number (buf, &val) == 0)
+			for (l = 0; l < cells[curr_cell].neurons[n].links_max; l++)
 			{
-				cells[curr_cell].neurons[n].links[l].node = val;
-			}
-			else
-			{
-				printf ("fann_load_cells: error 'link_node' parsing file: %s\n", filename);
-				fclose (fptr);
-				return (NULL);
-			}
-		}
-		
-		if (searchstr (buf, (U1 *) "link_node_input =", 0, 0, 1) >= 0)
-		{
-			if (get_number (buf, &val) == 0)
-			{
-				cells[curr_cell].neurons[n].links[l].node_input = val;
-			}
-			else
-			{
-				printf ("fann_load_cells: error 'link_node_input' parsing file: %s\n", filename);
-				fclose (fptr);
-				return (NULL);
-			}
-		}
-		
-		if (searchstr (buf, (U1 *) "link_node_output =", 0, 0, 1) >= 0)
-		{
-			if (get_number (buf, &val) == 0)
-			{
-				cells[curr_cell].neurons[n].links[l].node_output = val;
-			}
-			else
-			{
-				printf ("fann_load_cells: error 'link_node_output' parsing file: %s\n", filename);
-				fclose (fptr);
-				return (NULL);
+				// set found variables all to zero:
+				link_node = 0;
+				link_node_input = 0;
+				link_node_output = 0;
+				link_found_all = 0;
+					
+				while (link_found_all == 0)
+				{
+					if (fgets_uni ((char *) buf, MAXLINELEN, fptr) == NULL)
+					{
+						printf ("fann_load_cells: error reading data from file: %s\n", filename);
+						fclose (fptr);
+						return (NULL);
+					}
+						
+					// printf ("buf: '%s'\n", buf);
+						
+					if (searchstr (buf, (U1 *) "link_node =", 0, 0, 1) >= 0)
+					{
+						if (get_number (buf, &val) == 0)
+						{
+							cells[curr_cell].neurons[n].links[l].node = val;
+							link_node = 1;
+						}
+						else
+						{
+							printf ("fann_load_cells: error 'link_node' parsing file: %s\n", filename);
+							fclose (fptr);
+							return (NULL);
+						}
+					}
+						
+					if (searchstr (buf, (U1 *) "link_node_input =", 0, 0, 1) >= 0)
+					{
+						if (get_number (buf, &val) == 0)
+						{
+							cells[curr_cell].neurons[n].links[l].node_input = val;
+							link_node_input = 1;
+						}
+						else
+						{
+							printf ("fann_load_cells: error 'link_node_input' parsing file: %s\n", filename);
+							fclose (fptr);
+							return (NULL);
+						}
+					}
+					
+					if (searchstr (buf, (U1 *) "link_node_output =", 0, 0, 1) >= 0)
+					{
+						if (get_number (buf, &val) == 0)
+						{
+							cells[curr_cell].neurons[n].links[l].node_output = val;
+							link_node_output = 1;
+						}
+						else
+						{
+							printf ("fann_load_cells: error 'link_node_output' parsing file: %s\n", filename);
+							fclose (fptr);
+							return (NULL);
+						}
+					}
+						
+					if (link_node == 1 && link_node_input == 1 && link_node_output == 1)
+					{
+						link_found_all = 1;
+					}
+				}
 			}
 		}
 		
