@@ -380,7 +380,7 @@ S2 set_node_link (struct cell *cells, S8 cell, S8 node, S8 link, S8 link_node, S
 	}
 	else
 	{
-		printf ("set_node_links: error: no links overflow: cell: %lli, node: %lli!\n", cell, node);
+		printf ("set_node_links: error: links overflow: cell: %lli, node: %lli!\n", cell, node);
 		return (1);
 	}
 }
