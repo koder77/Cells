@@ -257,10 +257,22 @@ S2 fann_save_cells (struct cell *cells, U1 *filename, S8 start_cell, S8 end_cell
 					return (1);
 				}
 			}
-			// save links end
-			if (fprintf (fptr, "links_end\n") < 0)
+			
+			if (cells[i].neurons[n].links_max > 0)
 			{
-				printf ("fann_save_cells: error saving links header end to file: %s\n", filename);
+				// save links end
+				if (fprintf (fptr, "links_end\n") < 0)
+				{
+					printf ("fann_save_cells: error saving links header end to file: %s\n", filename);
+					fclose (fptr);
+					return (1);
+				}
+			}
+			
+			// save node end
+			if (fprintf (fptr, "node_end\n") < 0)
+			{
+				printf ("fann_save_cells: error saving node end to file: %s\n", filename);
 				fclose (fptr);
 				return (1);
 			}
@@ -633,7 +645,7 @@ struct cell *fann_load_cells (U1 *filename)
 			}
 		}
 		
-		if (searchstr (buf, (U1 *) "links_end", 0, 0, 1) >= 0)
+		if (searchstr (buf, (U1 *) "node_end", 0, 0, 1) >= 0)
 		{
 			// increase node:
 			n++;
