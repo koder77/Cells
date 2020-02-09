@@ -14,5 +14,6 @@ And changed the library functions: for exp. "fann_get_output" to give a return v
 S2 fann_get_output (struct cell *cells, S8 cell, S8 node, S8 output, F8 *return_value);
 
 Load cells output/input of links BUGFIX!
+fann_run_ann_go_links: for loops of cells/layers swapped in order.
 
--- Stefan Pietzonke <jay-t@gmx.net> Sun Feb 09 2020 18:00 +0100
+-- Stefan Pietzonke <jay-t@gmx.net> Sun Feb 09 2020 18:50 +0100
