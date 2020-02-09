@@ -56,7 +56,7 @@ int main (int ac, char *av[])
 	
 	alloc_neurons_equal (cells, max_cells, cell_neurons);
 	
-	// fann_read_ann (struct cell *cells, S8 cell, S8 node, U1 *filename, S8 inputs, S8 outputs, F8 *inputs_node, F8 *outputs_node, F8 strength, S8 layer, S8 init)
+	// fann_read_ann (struct cell *cells, S8 cell, S8 node, U1 *filename, S8 inputs, S8 outputs, F8 *inputs_node, F8 *outputs_node, S8 layer, S8 init)
 	
 	// read 3 ANNs into cell/nodes
 	fann_read_ann (cells, 0, 0, (U1 *) "fann/xor/xor_float.net", 2, 1, node_xor_inputsf, node_xor_outputsf, 0, 1);
@@ -127,15 +127,12 @@ int main (int ac, char *av[])
 	load_cells = fann_load_cells ((U1 *) "cell-demo.cells");
 	if (load_cells == NULL)
 	{
-		printf ("ERROR: can't load cell file!\n");
+		printf ("ERROR: can't load cells file!\n");
 		dealloc_neurons (cells, max_cells);
 		free (cells);
 		exit (1);
 	}
-	else
-	{
-		printf ("OK!\n");
-	}
+	printf ("OK!\n");
 	
 	printf ("\n\nrunning 'load_cells' ANNs...\n");
 	
