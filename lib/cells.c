@@ -31,13 +31,20 @@ S2 alloc_neurons_equal (struct cell *cells, S8 max_cells, S8 neurons)
 {
 	S8 i, n;
 	
+	if (cells == NULL)
+	{
+		// error: not allocated memory
+		printf ("alloc_neurons_equal: ERROR: cells structure not allocated!\n");
+		return (1);
+	}
+	
 	for (i = 0; i < max_cells; i++)
 	{
 		cells[i].neurons_max = neurons;
 		cells[i].neurons = (struct neuron *) calloc (neurons, sizeof (struct neuron));
 		if (cells[i].neurons == NULL)
 		{
-			printf ("ERROR: can't allocate %lli neurons in cell %lli!\n", neurons, i);
+			printf ("alloc_nerons_equal: ERROR: can't allocate %lli neurons in cell %lli!\n", neurons, i);
 			return (1);
 		}
 		
@@ -61,11 +68,19 @@ S2 alloc_neurons_equal (struct cell *cells, S8 max_cells, S8 neurons)
 S2 alloc_neurons (struct cell *cells, S8 cell, S8 neurons)
 {
 	S8 n;
+	
+	if (cells == NULL)
+	{
+		// error: not allocated memory
+		printf ("alloc_neurons: ERROR: cells structure not allocated!\n");
+		return (1);
+	}
+	
 	cells[cell].neurons_max = neurons;
 	cells[cell].neurons = (struct neuron *) calloc (neurons, sizeof (struct neuron));
 	if (cells[cell].neurons == NULL)
 	{
-		printf ("ERROR: can't allocate %lli neurons in cell %lli!\n", neurons, cell);
+		printf ("alloc_neurons: can't allocate %lli neurons in cell %lli!\n", neurons, cell);
 		return (1);
 	}
 	
@@ -85,10 +100,17 @@ S2 alloc_neurons (struct cell *cells, S8 cell, S8 neurons)
 	return (0);
 }
 
-void dealloc_neurons (struct cell *cells, S8 max_cells)
+S2 dealloc_neurons (struct cell *cells, S8 max_cells)
 {
 	S8 i;
 	S8 n;
+	
+	if (cells == NULL)
+	{
+		// error: not allocated memory
+		printf ("dealloc_neurons: ERROR: cells structure not allocated!\n");
+		return (1);
+	}
 	
 	for (i = 0; i < max_cells; i++)
 	{
@@ -101,11 +123,19 @@ void dealloc_neurons (struct cell *cells, S8 max_cells)
 		}
 		free (cells[i].neurons);
 	}
+	return (0);
 }
 
 S2 fann_do_update_ann (struct cell *cells, S8 cell, S8 node, F8 *inputs_node)
 {
 	S8 n;
+	
+	if (cells == NULL)
+	{
+		// error: not allocated memory
+		printf ("fann_do_update_ann: ERROR: cells structure not allocated!\n");
+		return (1);
+	}
 	
 	// safety check:
 	if (node < 0 || node >= cells[cell].neurons_max)
@@ -128,6 +158,13 @@ S2 fann_read_ann (struct cell *cells, S8 cell, S8 node, U1 *filename, S8 inputs,
 	
 	S8 n;
 	S8 filename_len;
+	
+	if (cells == NULL)
+	{
+		// error: not allocated memory
+		printf ("fann_read_ann: ERROR: cells structure not allocated!\n");
+		return (1);
+	}
 	
 	// safety check:
 	if (node < 0 || node >= cells[cell].neurons_max)
@@ -202,6 +239,13 @@ S2 fann_run_ann (struct cell *cells, S8 cell, S8 node)
 	fann_type *input_f;
 	fann_type *output_f;
 	
+	if (cells == NULL)
+	{
+		// error: not allocated memory
+		printf ("fann_run_ann: ERROR: cells structure not allocated!\n");
+		return (1);
+	}
+	
 	// safety check:
 	if (node < 0 || node >= cells[cell].neurons_max)
 	{
@@ -240,20 +284,42 @@ S2 fann_run_ann (struct cell *cells, S8 cell, S8 node)
 	return (0);
 }
 
-F8 fann_get_output (struct cell *cells, S8 cell, S8 node, S8 output)
+S2 fann_get_output (struct cell *cells, S8 cell, S8 node, S8 output, F8 *return_value)
 {
 	// safety check:
+	
+	if (cells == NULL)
+	{
+		// error: not allocated memory
+		printf ("fann_get_output: ERROR: cells structure not allocated!\n");
+		return (1);
+	}
+	
 	if (node < 0 || node >= cells[cell].neurons_max)
 	{
 		printf ("fann_get_output: error: node out of range!\n");
-		return (0.0);
+		return (1);
 	}
 	
-	return (cells[cell].neurons[node].outputs_nodef[output]);
+	if (output >= cells[cell].neurons[node].outputs)
+	{
+		printf ("fann_get_output: error: output out of range!\n");
+		return (1);
+	}
+	
+	return_value[0] = cells[cell].neurons[node].outputs_nodef[output];
+	return (0);
 }
 
 S2 alloc_node_links (struct cell *cells, S8 cell, S8 node, S8 links)
 {
+	if (cells == NULL)
+	{
+		// error: not allocated memory
+		printf ("alloc_node_links: ERROR: cells structure not allocated!\n");
+		return (1);
+	}
+	
 	cells[cell].neurons[node].links = calloc (links, sizeof (struct link));
 	if (cells[cell].neurons[node].links == NULL)
 	{
@@ -266,6 +332,13 @@ S2 alloc_node_links (struct cell *cells, S8 cell, S8 node, S8 links)
 
 S2 set_node_link (struct cell *cells, S8 cell, S8 node, S8 link, S8 link_node, S8 input, S8 output)
 {
+	if (cells == NULL)
+	{
+		// error: not allocated memory
+		printf ("set_node_link: ERROR: cells structure not allocated!\n");
+		return (1);
+	}
+	
 	// safety check:
 	if (node < 0 || node >= cells[cell].neurons_max)
 	{
@@ -312,10 +385,17 @@ S2 set_node_link (struct cell *cells, S8 cell, S8 node, S8 link, S8 link_node, S
 	}
 }
 
-S8 fann_get_max_layer (struct cell *cells, S8 start_cell, S8 end_cell)
+S2 fann_get_max_layer (struct cell *cells, S8 start_cell, S8 end_cell, S8 *max_layer_ret)
 {
 	S8 i, n;
 	S8 max_layer = 0;
+	
+	if (cells == NULL)
+	{
+		// error: not allocated memory
+		printf ("fann_get_max_layer: ERROR: cells structure not allocated!\n");
+		return (1);
+	}
 	
 	for (i = start_cell; i <= end_cell; i++)
 	{
@@ -327,13 +407,20 @@ S8 fann_get_max_layer (struct cell *cells, S8 start_cell, S8 end_cell)
 			}
 		}
 	}
-	
-	return (max_layer);
+	max_layer_ret = &max_layer;
+	return (0);
 }
 
-S8  fann_get_max_nodes (struct cell *cells, S8 cell)
+S2  fann_get_max_nodes (struct cell *cells, S8 cell, S8 *neurons_max_ret)
 {
-	return (cells[cell].neurons_max);
+	if (cells == NULL)
+	{
+		// error: not allocated memory
+		printf ("fann_get_output: ERROR: cells structure not allocated!\n");
+		return (1);
+	}
+	neurons_max_ret = &cells[cell].neurons_max;
+	return (0);
 }
 
 S2 fann_run_ann_go_links (struct cell *cells, S8 start_cell, S8 end_cell, S8 start_layer, S8 end_layer)
@@ -343,6 +430,13 @@ S2 fann_run_ann_go_links (struct cell *cells, S8 start_cell, S8 end_cell, S8 sta
 	S8 linked_neuron, node_input, node_output;
 	S8 layer;
 
+	if (cells == NULL)
+	{
+		// error: not allocated memory
+		printf ("fann_run_ann_go_links: ERROR: cells structure not allocated!\n");
+		return (1);
+	}
+	
 	for (i = start_cell; i <= end_cell; i++)
 	{
 		for (layer = start_layer; layer <= end_layer; layer++)

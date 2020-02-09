@@ -8,4 +8,9 @@ string.c added.
 New: fann_load_cell () cleanup and BUGFIXES!
 set_node_link: overflow checks added!
 
--- Stefan Pietzonke <jay-t@gmx.net> Sat Feb 08 2020 20:46 +0100
+Added checks to functions, if cell structure was allocated right.
+And changed the library functions: for exp. "fann_get_output" to give a return value for success or failure. The return value is given by a pointer variable:
+
+S2 fann_get_output (struct cell *cells, S8 cell, S8 node, S8 output, F8 *return_value);
+
+-- Stefan Pietzonke <jay-t@gmx.net> Sun Feb 09 2020 14:00 +0100

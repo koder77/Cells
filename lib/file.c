@@ -120,6 +120,14 @@ S2 fann_save_cells (struct cell *cells, U1 *filename, S8 start_cell, S8 end_cell
 	
 	FILE *fptr;
 	
+	// do sane check:
+	if (cells == NULL)
+	{
+		// error: not allocated memory
+		printf ("fann_save_cells: ERROR: cells structure not allocated!\n");
+		return (1);
+	}
+	
 	fptr = fopen ((const char *) filename, "w");
 	if (fptr == NULL)
 	{
