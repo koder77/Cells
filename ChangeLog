@@ -16,4 +16,6 @@ S2 fann_get_output (struct cell *cells, S8 cell, S8 node, S8 output, F8 *return_
 Load cells output/input of links BUGFIX!
 fann_run_ann_go_links: for loops of cells/layers swapped in order.
 
--- Stefan Pietzonke <jay-t@gmx.net> Sun Feb 09 2020 18:50 +0100
+Renamed all Cells functions to the beginning: "Cells_".
+
+-- Stefan Pietzonke <jay-t@gmx.net> Mon Feb 10 2020 17:07 +0100

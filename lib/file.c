@@ -113,7 +113,7 @@ void str_cut_newline (U1 *str)
 }
 
 
-S2 fann_save_cells (struct cell *cells, U1 *filename, S8 start_cell, S8 end_cell)
+S2 Cells_fann_save_cells (struct cell *cells, U1 *filename, S8 start_cell, S8 end_cell)
 {
 	S8 i, l;
 	S8 n;
@@ -336,7 +336,7 @@ S2 get_string (U1 *buf, U1 *string)
 	return (1);
 }
 
-struct cell *fann_load_cells (U1 *filename)
+struct cell *Cells_fann_load_cells (U1 *filename)
 {
 	/* The ANNs must be loaded in fann_read_ann() from their filenames as set
 	 * in this cells structure!
@@ -464,7 +464,7 @@ struct cell *fann_load_cells (U1 *filename)
 				cells[curr_cell].neurons = (struct neuron *) calloc (val, sizeof (struct neuron));
 				if (cells[curr_cell].neurons == NULL)
 				{
-					printf ("fann_load_ann: ERROR: can't allocate %lli neurons in cell %lli!\n", val, curr_cell);
+					printf ("fann_load_cells: ERROR: can't allocate %lli neurons in cell %lli!\n", val, curr_cell);
 					fclose (fptr);
 					return (NULL);
 				}

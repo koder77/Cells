@@ -27,7 +27,7 @@
 #include "cells.h"
 
 
-S2 alloc_neurons_equal (struct cell *cells, S8 max_cells, S8 neurons)
+S2 Cells_alloc_neurons_equal (struct cell *cells, S8 max_cells, S8 neurons)
 {
 	S8 i, n;
 	
@@ -65,7 +65,7 @@ S2 alloc_neurons_equal (struct cell *cells, S8 max_cells, S8 neurons)
 	return (0);
 }
 
-S2 alloc_neurons (struct cell *cells, S8 cell, S8 neurons)
+S2 Cells_alloc_neurons (struct cell *cells, S8 cell, S8 neurons)
 {
 	S8 n;
 	
@@ -100,7 +100,7 @@ S2 alloc_neurons (struct cell *cells, S8 cell, S8 neurons)
 	return (0);
 }
 
-S2 dealloc_neurons (struct cell *cells, S8 max_cells)
+S2 Cells_dealloc_neurons (struct cell *cells, S8 max_cells)
 {
 	S8 i;
 	S8 n;
@@ -126,7 +126,7 @@ S2 dealloc_neurons (struct cell *cells, S8 max_cells)
 	return (0);
 }
 
-S2 fann_do_update_ann (struct cell *cells, S8 cell, S8 node, F8 *inputs_node)
+S2 Cells_fann_do_update_ann (struct cell *cells, S8 cell, S8 node, F8 *inputs_node)
 {
 	S8 n;
 	
@@ -152,7 +152,7 @@ S2 fann_do_update_ann (struct cell *cells, S8 cell, S8 node, F8 *inputs_node)
 	return (0);
 }
 
-S2 fann_read_ann (struct cell *cells, S8 cell, S8 node, U1 *filename, S8 inputs, S8 outputs, F8 *inputs_node, F8 *outputs_node, S8 layer, S8 init)
+S2 Cells_fann_read_ann (struct cell *cells, S8 cell, S8 node, U1 *filename, S8 inputs, S8 outputs, F8 *inputs_node, F8 *outputs_node, S8 layer, S8 init)
 {
 	// do a new ANN init if "init" is set to one!!
 	
@@ -232,7 +232,7 @@ S2 fann_read_ann (struct cell *cells, S8 cell, S8 node, U1 *filename, S8 inputs,
 	return (0);
 }
 
-S2 fann_run_ann (struct cell *cells, S8 cell, S8 node)
+S2 Cells_fann_run_ann (struct cell *cells, S8 cell, S8 node)
 {
 	S8 i;
 	
@@ -284,7 +284,7 @@ S2 fann_run_ann (struct cell *cells, S8 cell, S8 node)
 	return (0);
 }
 
-S2 fann_get_output (struct cell *cells, S8 cell, S8 node, S8 output, F8 *return_value)
+S2 Cells_fann_get_output (struct cell *cells, S8 cell, S8 node, S8 output, F8 *return_value)
 {
 	// safety check:
 	
@@ -311,7 +311,7 @@ S2 fann_get_output (struct cell *cells, S8 cell, S8 node, S8 output, F8 *return_
 	return (0);
 }
 
-S2 alloc_node_links (struct cell *cells, S8 cell, S8 node, S8 links)
+S2 Cells_alloc_node_links (struct cell *cells, S8 cell, S8 node, S8 links)
 {
 	if (cells == NULL)
 	{
@@ -330,7 +330,7 @@ S2 alloc_node_links (struct cell *cells, S8 cell, S8 node, S8 links)
 	return (0);
 }
 
-S2 set_node_link (struct cell *cells, S8 cell, S8 node, S8 link, S8 link_node, S8 input, S8 output)
+S2 Cells_set_node_link (struct cell *cells, S8 cell, S8 node, S8 link, S8 link_node, S8 input, S8 output)
 {
 	if (cells == NULL)
 	{
@@ -385,7 +385,7 @@ S2 set_node_link (struct cell *cells, S8 cell, S8 node, S8 link, S8 link_node, S
 	}
 }
 
-S2 fann_get_max_layer (struct cell *cells, S8 start_cell, S8 end_cell, S8 *max_layer_ret)
+S2 Cells_fann_get_max_layer (struct cell *cells, S8 start_cell, S8 end_cell, S8 *max_layer_ret)
 {
 	S8 i, n;
 	S8 max_layer = 0;
@@ -411,7 +411,7 @@ S2 fann_get_max_layer (struct cell *cells, S8 start_cell, S8 end_cell, S8 *max_l
 	return (0);
 }
 
-S2  fann_get_max_nodes (struct cell *cells, S8 cell, S8 *neurons_max_ret)
+S2 Cells_fann_get_max_nodes (struct cell *cells, S8 cell, S8 *neurons_max_ret)
 {
 	if (cells == NULL)
 	{
@@ -423,7 +423,7 @@ S2  fann_get_max_nodes (struct cell *cells, S8 cell, S8 *neurons_max_ret)
 	return (0);
 }
 
-S2 fann_run_ann_go_links (struct cell *cells, S8 start_cell, S8 end_cell, S8 start_layer, S8 end_layer)
+S2 Cells_fann_run_ann_go_links (struct cell *cells, S8 start_cell, S8 end_cell, S8 start_layer, S8 end_layer)
 {
 	S8 i, j;
 	S8 n;
@@ -447,7 +447,7 @@ S2 fann_run_ann_go_links (struct cell *cells, S8 start_cell, S8 end_cell, S8 sta
 				{
 					// cell is in current layer, do run 
 				
-					if (fann_run_ann (cells, i, n) != 0)
+					if (Cells_fann_run_ann (cells, i, n) != 0)
 					{
 						printf ("fann_run_ann_go_links: error running ANN!\n");
 						return (1);
