@@ -211,7 +211,7 @@ S2 fann_read_ann (struct cell *cells, S8 cell, S8 node, U1 *filename, S8 inputs,
 	cells[cell].neurons[node].inputs_nodef = calloc (inputs, sizeof (F8));
 	if (cells[cell].neurons[node].inputs_nodef == NULL)
 	{
-		printf ("ERROR: can't allocate inputs nodes!\n");
+		printf ("fann_read_ann: ERROR: can't allocate inputs nodes!\n");
 		return (1);
 	}
 	for (n = 0; n < inputs; n++)
@@ -222,7 +222,7 @@ S2 fann_read_ann (struct cell *cells, S8 cell, S8 node, U1 *filename, S8 inputs,
 	cells[cell].neurons[node].outputs_nodef = calloc (outputs, sizeof (F8));
 	if (cells[cell].neurons[node].outputs_nodef == NULL)
 	{
-		printf ("ERROR: can't allocate outputs nodes!\n");
+		printf ("fann_read_ann: ERROR: can't allocate outputs nodes!\n");
 		return (1);
 	}
 	for (n = 0; n < outputs; n++)
@@ -416,7 +416,7 @@ S2  fann_get_max_nodes (struct cell *cells, S8 cell, S8 *neurons_max_ret)
 	if (cells == NULL)
 	{
 		// error: not allocated memory
-		printf ("fann_get_output: ERROR: cells structure not allocated!\n");
+		printf ("fann_get_max_nodes: ERROR: cells structure not allocated!\n");
 		return (1);
 	}
 	neurons_max_ret = &cells[cell].neurons_max;
@@ -449,7 +449,7 @@ S2 fann_run_ann_go_links (struct cell *cells, S8 start_cell, S8 end_cell, S8 sta
 				
 					if (fann_run_ann (cells, i, n) != 0)
 					{
-						printf ("run_ann_go_links: error running ANN!\n");
+						printf ("fann_run_ann_go_links: error running ANN!\n");
 						return (1);
 					}
 				
