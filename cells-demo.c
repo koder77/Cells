@@ -54,14 +54,42 @@ int main (int ac, char *av[])
 		exit (1);
 	}
 	
-	Cells_alloc_neurons_equal (cells, max_cells, cell_neurons);
+	if (Cells_alloc_neurons_equal (cells, max_cells, cell_neurons) != 0)
+	{
+		printf ("ERROR: can't allocate memory for neurons!\n");
+		Cells_dealloc_neurons (cells, max_cells);
+		free (cells);
+		
+		exit (1);
+	}
 	
 	// fann_read_ann (struct cell *cells, S8 cell, S8 node, U1 *filename, S8 inputs, S8 outputs, F8 *inputs_node, F8 *outputs_node, S8 layer, S8 init)
 	
 	// read 3 ANNs into cell/nodes
-	Cells_fann_read_ann (cells, 0, 0, (U1 *) "fann/xor/xor_float.net", 2, 1, node_xor_inputsf, node_xor_outputsf, 0, 1);
-	Cells_fann_read_ann (cells, 0, 1, (U1 *) "fann/or/or_float.net", 2, 1, node_or_inputsf, node_or_outputsf, 0, 1);
-	Cells_fann_read_ann (cells, 0, 2, (U1 *) "fann/and/and_float.net", 2, 1, node_and_inputsf, node_and_outputsf, 1, 1);
+	if (Cells_fann_read_ann (cells, 0, 0, (U1 *) "fann/xor/xor_float.net", 2, 1, node_xor_inputsf, node_xor_outputsf, 0, 1) != 0)
+	{
+		printf ("ERROR: can't read xor ANN!\n");
+		Cells_dealloc_neurons (cells, max_cells);
+		free (cells);
+		
+		exit (1);
+	}
+	if (Cells_fann_read_ann (cells, 0, 1, (U1 *) "fann/or/or_float.net", 2, 1, node_or_inputsf, node_or_outputsf, 0, 1) != 0)
+	{
+		printf ("ERROR: can't read or ANN!\n");
+		Cells_dealloc_neurons (cells, max_cells);
+		free (cells);
+		
+		exit (1);
+	}
+	if (Cells_fann_read_ann (cells, 0, 2, (U1 *) "fann/and/and_float.net", 2, 1, node_and_inputsf, node_and_outputsf, 1, 1) != 0)
+	{
+		printf ("ERROR: can't read and ANN!\n");
+		Cells_dealloc_neurons (cells, max_cells);
+		free (cells);
+		
+		exit (1);
+	}
 	
 	// allocate memory for links
 	if (Cells_alloc_node_links (cells, 0, 0, 1) != 0)
@@ -137,9 +165,30 @@ int main (int ac, char *av[])
 	printf ("\n\nrunning 'load_cells' ANNs...\n");
 	
 	// read 3 ANNs into cell/nodes: load_cell
-	Cells_fann_read_ann (load_cells, 0, 0, (U1 *) "", 0, 0, node_xor_inputsf, node_xor_outputsf, 0, 0);
-	Cells_fann_read_ann (load_cells, 0, 1, (U1 *) "", 0, 0, node_or_inputsf, node_or_outputsf, 0, 0);
-	Cells_fann_read_ann (load_cells, 0, 2, (U1 *) "", 0, 0, node_and_inputsf, node_and_outputsf, 1, 0);
+	if (Cells_fann_read_ann (load_cells, 0, 0, (U1 *) "", 0, 0, node_xor_inputsf, node_xor_outputsf, 0, 0) != 0)
+	{
+		printf ("ERROR: load_cells: can't read xor ANN!\n");
+		Cells_dealloc_neurons (cells, max_cells);
+		free (cells);
+		
+		exit (1);
+	}
+	if (Cells_fann_read_ann (load_cells, 0, 1, (U1 *) "", 0, 0, node_or_inputsf, node_or_outputsf, 0, 0) != 0)
+	{
+		printf ("ERROR: load_cells: can't read or ANN!\n");
+		Cells_dealloc_neurons (cells, max_cells);
+		free (cells);
+		
+		exit (1);
+	}
+	if (Cells_fann_read_ann (load_cells, 0, 2, (U1 *) "", 0, 0, node_and_inputsf, node_and_outputsf, 1, 0) != 0)
+	{
+		printf ("ERROR: load_cells: can't read and ANN!\n");
+		Cells_dealloc_neurons (cells, max_cells);
+		free (cells);
+		
+		exit (1);
+	}
 	
 	// run ANNs in load_cell:
 	Cells_fann_get_max_layer (load_cells, 0, 0, &max_layers);
