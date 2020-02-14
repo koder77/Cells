@@ -190,6 +190,17 @@ S2 Cells_fann_read_ann (struct cell *cells, S8 cell, S8 node, U1 *filename, S8 i
 	// printf ("fann_read_ann: cell: %lli, node: %lli\n", cell, node);
 	cells[cell].neurons[node].type = ANN;
 	cells[cell].neurons[node].ann = (struct fann *) fann_create_from_file ((const char*) cells[cell].neurons[node].fann_name);
+	
+	// return value check!!!
+	if (cells[cell].neurons[node].ann == NULL)
+	{
+		printf ("fann_read_ann: ERROR: can't open ANN file: '%s'!\n", cells[cell].neurons[node].fann_name);
+		// reset file name
+		strcpy ((char *) cells[cell].neurons[node].fann_name, (const char *) "");
+		// ERROR RETURN
+		return (1);
+	}
+	
 	cells[cell].neurons[node].fann_state = ANNOPEN;
 	
 	if (init == 1)
