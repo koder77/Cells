@@ -18,4 +18,6 @@ fann_run_ann_go_links: for loops of cells/layers swapped in order.
 
 Renamed all Cells functions to the beginning: "Cells_".
 
--- Stefan Pietzonke <jay-t@gmx.net> Mon Feb 10 2020 17:07 +0100
+Updated make scripts to link math library at last lib and fixing a linker runtime error!
+
+-- Stefan Pietzonke <jay-t@gmx.net> Sun Jul 12 2020 16:27 +0200

@@ -23,6 +23,7 @@
 #include <stdarg.h>
 #include <inttypes.h>
 
+#include <math.h>
 #include <cells.h>
 
 
@@ -35,8 +36,8 @@ void cleanup (void)
 {
 	Cells_dealloc_neurons (cells, max_cells);
 	free (cells);
-	
-	if (load_cells) 
+
+	if (load_cells)
 	{
 		Cells_dealloc_neurons (load_cells, max_cells);
 		free (load_cells);
@@ -47,35 +48,35 @@ int main (int ac, char *av[])
 {
 	S8 max_layers = 1;
 	S8 cell_neurons = 3;
-	
+
 	// set input values
 	F8 node_xor_inputsf[2] = {0.0, 1.0};
 	F8 node_xor_outputsf[1] = {0.0};
-	
+
 	F8 node_or_inputsf[2] = {1.0, 0.0};
 	F8 node_or_outputsf[1] = {0.0};
-	
+
 	F8 node_and_inputsf[2] = {0.0, 0.0};
 	F8 node_and_outputsf[1] = {0.0};
-	
+
 	F8 output[1] = {0.0};
-	
+
 	cells = (struct cell *) calloc (max_cells, sizeof (struct cell));
 	if (cells == NULL)
 	{
 		printf ("ERROR: can't allocate %lli cells!\n", max_cells);
 		exit (1);
 	}
-	
+
 	if (Cells_alloc_neurons_equal (cells, max_cells, cell_neurons) != 0)
 	{
 		printf ("ERROR: can't allocate memory for neurons!\n");
 		cleanup ();
 		exit (1);
 	}
-	
+
 	// fann_read_ann (struct cell *cells, S8 cell, S8 node, U1 *filename, S8 inputs, S8 outputs, F8 *inputs_node, F8 *outputs_node, S8 layer, S8 init)
-	
+
 	// read 3 ANNs into cell/nodes
 	if (Cells_fann_read_ann (cells, 0, 0, (U1 *) "fann/xor/xor_float.net", 2, 1, node_xor_inputsf, node_xor_outputsf, 0, 1) != 0)
 	{
@@ -95,7 +96,7 @@ int main (int ac, char *av[])
 		cleanup ();
 		exit (1);
 	}
-	
+
 	// allocate memory for links
 	if (Cells_alloc_node_links (cells, 0, 0, 1) != 0)
 	{
@@ -103,44 +104,44 @@ int main (int ac, char *av[])
 		cleanup ();
 		exit (1);
 	}
-	
+
 	if (Cells_alloc_node_links (cells, 0, 1, 1) != 0)
 	{
 		printf ("ERROR: can't allocate memory for links!\n");
 		cleanup ();
 		exit (1);
 	}
-	
+
 	// set_node_link (struct cell *cells, S8 cell, S8 node, S8 link, S8 link_node, S8 input, S8 output)
 	// set links: link output of node 0 and node 1 into inputs of node 2 (AND):
 	Cells_set_node_link (cells, 0, 0, 0, 2, 0, 0);
 	Cells_set_node_link (cells, 0, 1, 0, 2, 1, 0);
-	
+
 	// finally run ANNs on the layers 0 and 1:
 	// S2 fann_run_ann_go_links (struct cell *cells, S8 start_cell, S8 end_cell, S8 start_layer, S8 end_layer)
 	Cells_fann_run_ann_go_links (cells, 0, 0, 0, max_layers);
-	
+
 	Cells_fann_get_output (cells, 0, 0, 0, output);
 	printf ("run ann XOR layer 0: cell: 0, node: 0, output 0: %lf\n", output[0]);
-	
+
 	Cells_fann_get_output (cells, 0, 1, 0, output);
 	printf ("run ann OR layer  0: cell: 0, node: 1, output 0: %lf\n", output[0]);
-	
+
 	Cells_fann_get_output (cells, 0, 2, 0, output);
 	printf ("run ann AND layer 1: cell: 0, node: 2, output 0: %lf\n", output[0]);
-	
+
 	printf ("\n\nchanging OR: to 0.0, 0.0...\n");
 	node_or_inputsf[0] = 0.0;
 	node_or_inputsf[1] = 0.0;
-	
+
 	Cells_fann_do_update_ann (cells, 0, 1, node_or_inputsf);
-	
+
 	// finally rerun ANNs on the layers 0 and 1:
 	Cells_fann_run_ann_go_links (cells, 0, 0, 0, max_layers);
-	
+
 	Cells_fann_get_output (cells, 0, 2, 0, output);
 	printf ("rerun ann AND layer 1: cell: 0, node: 2, output 0: %lf\n", output[0]);
-	
+
 	printf ("saving cells...\n");
 	// S2 fann_save_cells (struct cell *cells, U1 *filename, S8 start_cell, S8 end_cell)
 	if (Cells_fann_save_cells (cells, (U1 *) "cell-demo.cells", 0, 0) != 0)
@@ -150,7 +151,7 @@ int main (int ac, char *av[])
 		exit (1);
 	}
 	printf ("OK!\n");
-	
+
 	printf ("loading cells file into 'load_cells' ...\n");
 	load_cells = Cells_fann_load_cells ((U1 *) "cell-demo.cells");
 	if (load_cells == NULL)
@@ -160,9 +161,9 @@ int main (int ac, char *av[])
 		exit (1);
 	}
 	printf ("OK!\n");
-	
+
 	printf ("\n\nrunning 'load_cells' ANNs...\n");
-	
+
 	// read 3 ANNs into cell/nodes: load_cell
 	if (Cells_fann_read_ann (load_cells, 0, 0, (U1 *) "", 0, 0, node_xor_inputsf, node_xor_outputsf, 0, 0) != 0)
 	{
@@ -182,20 +183,20 @@ int main (int ac, char *av[])
 		cleanup ();
 		exit (1);
 	}
-	
+
 	// run ANNs in load_cell:
 	Cells_fann_get_max_layer (load_cells, 0, 0, &max_layers);
 	Cells_fann_run_ann_go_links (load_cells, 0, 0, 0, max_layers);
-	
+
 	Cells_fann_get_output (load_cells, 0, 0, 0, output);
 	printf ("\nload_cells: run ann XOR layer 0: cell: 0, node: 0, output 0: %lf\n", output[0]);
-	
+
 	Cells_fann_get_output (load_cells, 0, 1, 0, output);
 	printf ("load_cells: run ann OR layer  0: cell: 0, node: 1, output 0: %lf\n", output[0]);
-	
+
 	Cells_fann_get_output (load_cells, 0, 2, 0, output);
 	printf ("load_cells: run ann AND layer 1: cell: 0, node: 2, output 0: %lf\n", output[0]);
-	
+
 	cleanup ();
 	exit (0);
 }
