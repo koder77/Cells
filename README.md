@@ -1,4 +1,4 @@
-Cells 0.1 - README  2020-02-10
+Cells 0.5 - README  2023-10-06
 ==============================
 Work in progress!
 This is Cells, a new way to ANNs (artifical neural networks).
