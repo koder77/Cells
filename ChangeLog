@@ -1,3 +1,8 @@
+Cells - 0.5 2023
+	Added  Cells_dealloc_node_links function to dealloc nodes links.
+
+-- Stefan Pietzonke <jay-t@gmx.net> Fri Oct 06 2020 19:14 +0200
+
 Cells - 0.1 2020
 Initial commits, everything WIP. Much work to do!
 

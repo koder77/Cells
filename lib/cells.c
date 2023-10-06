@@ -341,6 +341,26 @@ S2 Cells_alloc_node_links (struct cell *cells, S8 cell, S8 node, S8 links)
 	return (0);
 }
 
+S2 Cells_dealloc_node_links (struct cell *cells, S8 cell, S8 node)
+{
+
+	if (cells == NULL)
+	{
+		// error: not allocated memory
+		printf ("dealloc_node_links: ERROR: cells structure not allocated!\n");
+		return (1);
+	}
+
+	if (cells[cell].neurons[node].links != NULL)
+	{
+		free (cells[cell].neurons[node].links);
+	    cells[cell].neurons[node].links = NULL;
+		cells[cell].neurons[node].links_max = 0;
+	}
+
+	return (0);
+}
+
 S2 Cells_set_node_link (struct cell *cells, S8 cell, S8 node, S8 link, S8 link_node, S8 input, S8 output)
 {
 	if (cells == NULL)
@@ -395,6 +415,8 @@ S2 Cells_set_node_link (struct cell *cells, S8 cell, S8 node, S8 link, S8 link_n
 		return (1);
 	}
 }
+
+
 
 S2 Cells_fann_get_max_layer (struct cell *cells, S8 start_cell, S8 end_cell, S8 *max_layer_ret)
 {
