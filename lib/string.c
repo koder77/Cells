@@ -24,13 +24,14 @@
 
 #include "cells.h"
 
-size_t strlen_safe (const char * str, int maxlen)
+size_t strlen_safe (const char *str, S8 maxlen)
 {
-	 long long int i = 0;
+	 S8 i = 0 ;
+
 
 	 while (1)
 	 {
-	 	if (str[i] != '\0')
+		if (str[i] != '\0')
 		{
 			i++;
 		}
@@ -38,7 +39,8 @@ size_t strlen_safe (const char * str, int maxlen)
 		{
 			return (i);
 		}
-		if (i > maxlen)
+
+		if (i >= maxlen)
 		{
 			return (0);
 		}

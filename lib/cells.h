@@ -90,6 +90,6 @@ char *fgets_uni (char *str, int len, FILE *fptr);
 S2 Cells_fann_save_cells (struct cell *cells, U1 *filename, S8 start_cell, S8 end_cell);
 struct cell *Cells_fann_load_cells (U1 *filename);
 // string.c:
-size_t strlen_safe (const char * str, int maxlen);
+size_t strlen_safe (const char *str, S8  maxlen);
 S2 searchstr (U1 *str, U1 *srchstr, S2 start, S2 end, U1 case_sens);
 void convtabs (U1 *str);
